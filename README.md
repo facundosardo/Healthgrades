@@ -1,78 +1,59 @@
-# Healthgrades Professionals Scraper
+# 📝 Healthgrades Scraper  
 
-This repository contains three Python scripts to scrape health professionals data from [Healthgrades](https://www.healthgrades.com/). Each script targets a different profession and generates CSV files with the extracted information.
-
----
-
-## File Structure
-
-- `healthgrades_ac.py`  
-  Scrapes **Acupuncture** professionals in Fairfield, CT.
-
-- `healthgrades_ch.py`  
-  Scrapes **Chiropractic** professionals in Fairfield, CT.
-
-- `healthgrades_ma.py`  
-  Scrapes **Massage Therapy** professionals in Fairfield, CT.
+This script extracts healthcare professional data from **Healthgrades**, focusing on Acupuncture, Chiropractic, and Massage Therapy in Fairfield, CT. It saves data into two CSV files per profession:  
 
 ---
 
-## General Workflow
+## 📁 **Generated Files**  
+- **healthgrades_xx.csv:** Master database with all collected professionals (no duplicates).  
+- **healthgrades_xxnewprofs.csv:** Only new professionals found in the current run.  
 
-Each script performs the following steps:
-
-1. Opens the Healthgrades homepage.  
-2. Inputs the search term for the specific profession.  
-3. Sets the location to **Fairfield, CT**, replacing the default location.  
-4. Executes the search and navigates through all result pages.  
-5. Extracts for each professional:  
-   - Name  
-   - City  
-   - Full address  
-6. Saves the data into two CSV files:
-
-| File                 | Content                                        |
-|----------------------|------------------------------------------------|
-| `healthgrades_xx.csv`        | Master cumulative database without duplicates. |
-| `healthgrades_xxnewprofs.csv` | New professionals found in the current run.      |
-
-**Note:** `xx` suffix depends on the profession:  
-- `ac` for Acupuncture  
-- `ch` for Chiropractic  
-- `ma` for Massage Therapy
+(`xx` suffix: `ac` for Acupuncture, `ch` for Chiropractic, `ma` for Massage Therapy)  
 
 ---
 
-## Requirements
-
+## ⚙️ **Requirements**  
 - Python 3.x  
-- Installed packages:  
-  - selenium  
-  - webdriver-manager  
+- Google Chrome  
+- Packages:  
+    ```bash
+    pip install selenium webdriver-manager
+    ```  
 
-Quick install command:  
-```bash
-pip install selenium webdriver-manager
-```
+---
 
-## Usage
+## 🚀 **Usage**  
+1. Clone or download the script.  
+2. Install dependencies.  
+3. Run the script:  
+    ```bash
+    python your_script.py
+    ```  
+   (Runs all three professions automatically)  
 
-Run any of the scripts:
+---
 
-```bash
-Copy
-python healthgrades_ac.py
-python healthgrades_chiropractic.py
-python healthgrades_massage.py
-```
+## 🌐 **How it works**  
+- Opens Healthgrades homepage.  
+- Inputs profession and sets location to "Fairfield, CT" (clearing previous input).  
+- Searches and navigates all result pages.  
+- Extracts Name, City, and Full Address of professionals.  
+- Saves all data in a master CSV and new entries in a separate CSV.  
+- Avoids duplicates using (Name, City) as a unique key.  
 
-## Notes
+---
 
-- The scraper avoids duplicates using (Name, City) as a unique key.
-- CSV files are updated to maintain a historical master file and a separate file for new entries only.
-- Browser opens maximized; headless mode can be enabled by uncommenting the respective line in the scripts.
-- ChromeDriver and browser versions should be compatible to avoid issues.
+## 🤖 **Customization**  
+Modify the profession and file names in the `scrape_profession()` calls.  
+Enable headless mode by uncommenting the option in the script.  
 
-## Contributions
+---
 
-Feel free to open issues or pull requests for improvements or bug fixes.
+## 📌 **Notes**  
+- Browser opens maximized by default.  
+- Keep Chrome and ChromeDriver updated for compatibility.  
+
+---
+
+## 🙌 **Contributions**  
+Feel free to open issues or pull requests for improvements or help.
