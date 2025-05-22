@@ -5,17 +5,20 @@ This script extracts healthcare professional data from **Healthgrades**, focusin
 ---
 
 ## 📁 **Generated Files**  
-- **healthgrades_xx.csv:** Master database with all collected professionals (no duplicates).  
-- **healthgrades_xxnewprofs.csv:** Only new professionals found in the current run.  
+- **healthgrades_xx.csv:** Master database containing all collected professionals (no duplicates).  
+- **healthgrades_xxnewprofs.csv:** Contains only new professionals found in the current run.  
 
-(`xx` suffix: `ac` for Acupuncture, `ch` for Chiropractic, `ma` for Massage Therapy)  
+(`xx` suffixes:  
+- `ac` for Acupuncture  
+- `ch` for Chiropractic  
+- `ma` for Massage Therapy)  
 
 ---
 
 ## ⚙️ **Requirements**  
 - Python 3.x  
-- Google Chrome  
-- Packages:  
+- Google Chrome browser  
+- Python packages:  
     ```bash
     pip install selenium webdriver-manager
     ```  
@@ -23,37 +26,37 @@ This script extracts healthcare professional data from **Healthgrades**, focusin
 ---
 
 ## 🚀 **Usage**  
-1. Clone or download the script.  
-2. Install dependencies.  
+1. Clone or download the repository or script.  
+2. Install dependencies as shown above.  
 3. Run the script:  
     ```bash
     python your_script.py
     ```  
-   (Runs all three professions automatically)  
+   (This will run all three professions sequentially.)  
 
 ---
 
 ## 🌐 **How it works**  
-- Opens Healthgrades homepage.  
-- Inputs profession and sets location to "Fairfield, CT" (clearing previous input).  
-- Searches and navigates all result pages.  
-- Extracts Name, City, and Full Address of professionals.  
-- Saves all data in a master CSV and new entries in a separate CSV.  
-- Avoids duplicates using (Name, City) as a unique key.  
+- Opens the Healthgrades homepage.  
+- Enters the profession keyword and sets location to "Fairfield, CT" (clearing previous input completely).  
+- Executes the search and navigates through all result pages.  
+- Extracts each professional’s Name, City, and Full Address.  
+- Saves all results to a master CSV file and only new entries to a separate CSV file.  
+- Uses (Name, City) as a unique key to avoid duplicates.  
 
 ---
 
 ## 🤖 **Customization**  
-Modify the profession and file names in the `scrape_profession()` calls.  
-Enable headless mode by uncommenting the option in the script.  
+- To scrape other professions or locations, modify the `scrape_profession()` function calls with desired keywords and file names.  
+- Headless mode can be enabled by uncommenting the respective option in the script.  
 
 ---
 
 ## 📌 **Notes**  
-- Browser opens maximized by default.  
-- Keep Chrome and ChromeDriver updated for compatibility.  
+- The browser opens maximized by default to reduce scraping errors.  
+- Ensure your Chrome and ChromeDriver versions are compatible to avoid issues.  
 
 ---
 
 ## 🙌 **Contributions**  
-Feel free to open issues or pull requests for improvements or help.
+Contributions, bug reports, and feature requests are welcome. Feel free to open issues or pull requests.
