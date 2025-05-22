@@ -9,10 +9,10 @@ This repository contains three Python scripts to scrape health professionals dat
 - `healthgrades_ac.py`  
   Scrapes **Acupuncture** professionals in Fairfield, CT.
 
-- `healthgrades_chiropractic.py`  
+- `healthgrades_ch.py`  
   Scrapes **Chiropractic** professionals in Fairfield, CT.
 
-- `healthgrades_massage.py`  
+- `healthgrades_ma.py`  
   Scrapes **Massage Therapy** professionals in Fairfield, CT.
 
 ---
