@@ -189,7 +189,6 @@ def main():
     scrape_profession("Acupuncture", "healthgrades_ac.csv", "healthgrades_acnewprofs.csv")
     scrape_profession("Chiropractic", "healthgrades_ch.csv", "healthgrades_chnewprofs.csv")
     scrape_profession("Massage Therapy", "healthgrades_ma.csv", "healthgrades_manewprofs.csv")
-    scrape_profession("Neuropathology", "healthgrades_ne.csv", "healthgrades_nenewprofs.csv")
 
 if __name__ == "__main__":
-    main() 
+    main()
