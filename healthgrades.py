@@ -1,6 +1,6 @@
 import time
 import csv
-import os
+import os 
 import platform
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -53,15 +53,20 @@ def set_location_strict(driver, wait, location_input, location_text="Fairfield, 
 
     raise Exception(f"Failed to set location input to '{location_text}' after {max_attempts} attempts")
 
-def scrape_profession(profession, master_file, new_file):
+def scrape_profession(profession):
+    master_file = "healthgrades_master.csv"
+    new_file = "healthgrades_new.csv"
+
     options = webdriver.ChromeOptions()
     options.add_argument("--start-maximized")
-    # options.add_argument("--headless")  # For headless mode
+    # options.add_argument("--headless")  # Uncomment if you want headless
 
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     wait = WebDriverWait(driver, 20)
 
     existing_pros = set()
+    all_pros = []
+
     if os.path.exists(master_file):
         with open(master_file, "r", encoding="utf-8") as f:
             reader = csv.reader(f)
@@ -70,9 +75,9 @@ def scrape_profession(profession, master_file, new_file):
                 if len(row) >= 2:
                     key = (row[0], row[1])
                     existing_pros.add(key)
+                    all_pros.append([row[0], row[1], row[2] if len(row) > 2 else "No address"])
 
     new_pros = []
-    all_pros = []
 
     try:
         driver.get("https://www.healthgrades.com/")
@@ -101,10 +106,22 @@ def scrape_profession(profession, master_file, new_file):
         except Exception:
             print("Suggestion list did not appear or could not be selected, continuing without selection.")
 
+        try:
+            # Wait for overlay to disappear if any
+            wait.until(EC.invisibility_of_element_located((By.CSS_SELECTOR, "span._overlay_1ox12_70")))
+        except:
+            pass
+
         final_search_btn = wait.until(EC.element_to_be_clickable((
             By.XPATH, f"//button[contains(@aria-label, 'Fairfield, CT') and contains(@aria-label, 'Search for {profession}')]"
         )))
-        final_search_btn.click()
+
+        try:
+            final_search_btn.click()
+        except Exception:
+            # If click intercepted, click via JS
+            driver.execute_script("arguments[0].click();", final_search_btn)
+
         print("Final search button clicked.")
 
         time.sleep(5)
@@ -145,8 +162,7 @@ def scrape_profession(profession, master_file, new_file):
                         print(f"New professional detected: {name} - {city}")
                         existing_pros.add(key)
                         new_pros.append([name, city, full_address])
-
-                    all_pros.append([name, city, full_address])
+                        all_pros.append([name, city, full_address])
 
                 except Exception as e:
                     print(f"Error extracting data from a profile: {e}")
@@ -169,26 +185,30 @@ def scrape_profession(profession, master_file, new_file):
                 print("No next page button found or last page reached.")
                 break
 
+    finally:
+        driver.quit()
+
+    # Save new professionals only
+    with open(new_file, "w", newline="", encoding="utf-8") as f_new:
+        writer_new = csv.writer(f_new)
+        writer_new.writerow(["Name", "City", "Full Address"])
+        writer_new.writerows(new_pros)
+
+    # Save master file only if new professionals found
+    if new_pros:
         with open(master_file, "w", newline="", encoding="utf-8") as f_master:
             writer_master = csv.writer(f_master)
             writer_master.writerow(["Name", "City", "Full Address"])
             writer_master.writerows(all_pros)
-
-        with open(new_file, "w", newline="", encoding="utf-8") as f_new:
-            writer_new = csv.writer(f_new)
-            writer_new.writerow(["Name", "City", "Full Address"])
-            writer_new.writerows(new_pros)
-
         print(f"Master file updated with {len(all_pros)} professionals.")
-        print(f"{len(new_pros)} new professionals saved in '{new_file}'.")
+    else:
+        print("No new professionals found; master file not updated.")
 
-    finally:
-        driver.quit()
+    print(f"{len(new_pros)} new professionals saved in '{new_file}'.")
 
 def main():
-    scrape_profession("Acupuncture", "healthgrades_ac.csv", "healthgrades_acnewprofs.csv")
-    scrape_profession("Chiropractic", "healthgrades_ch.csv", "healthgrades_chnewprofs.csv")
-    scrape_profession("Massage Therapy", "healthgrades_ma.csv", "healthgrades_manewprofs.csv")
+    for profession in ["Acupuncture", "Chiropractic", "Massage Therapy", "Neuropathology"]:
+        scrape_profession(profession)
 
 if __name__ == "__main__":
     main()
